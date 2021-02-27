@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yesmylord.dms.mapper.AdminMapper">
+  <resultMap id="BaseResultMap" type="cn.yesmylord.dms.domain.Admin">
+    <!--@mbg.generated-->
+    <!--@Table `admin`-->
+    <id column="adminId" jdbcType="INTEGER" property="adminid" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    adminId, userId, username, `password`
+  </sql>
+    <select id="selectByUsername" resultType="java.lang.String">
+      select password
+      from `admin`
+      where
+      `admin`.username = #{username}
+    </select>
+
+  <update id="updatePassword">
+    update `admin` set
+    password = #{newPassword}
+    where username = #{username}
+    </update>
+</mapper>

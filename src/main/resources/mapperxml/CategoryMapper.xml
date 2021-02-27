@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yesmylord.dms.mapper.CategoryMapper">
+  <resultMap id="BaseResultMap" type="cn.yesmylord.dms.domain.Category">
+    <!--@mbg.generated-->
+    <!--@Table category-->
+    <id column="categoryId" jdbcType="INTEGER" property="categoryid" />
+    <result column="categoryName" jdbcType="VARCHAR" property="categoryname" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    categoryId, categoryName, remarks
+  </sql>
+
+  <select id="showCategoryList" resultMap="BaseResultMap">
+    select * from category where state = 0
+  </select>
+
+  <select id="searchByName" resultMap="BaseResultMap">
+    select * from category where state = 0 and categoryName like CONCAT('%',#{name},'%')
+    </select>
+
+  <update id="updateCategory" parameterType="cn.yesmylord.dms.form.CategoryUpdateForm">
+    UPDATE category SET
+    <if test="categoryname!=null and categoryname!=''">
+      categoryname= #{categoryname}
+    </if>
+    <if test="remarks != null and remarks != ''">
+      ,remarks=#{remarks}
+    </if>
+    WHERE categoryId=#{categoryid}
+  </update>
+
+  <insert id="insertCategory" parameterType="cn.yesmylord.dms.form.CategoryInsertForm">
+    insert into category(categoryname,remarks,`state`) values (#{categoryname},#{remarks},0)
+  </insert>
+
+  <update id="updateCategoryState">
+    UPDATE category SET
+    state=-1
+    WHERE categoryId=#{categoryid}
+  </update>
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yesmylord.dms.mapper.ApplicationMapper">
+  <resultMap id="BaseResultMap" type="cn.yesmylord.dms.domain.Application">
+    <!--@mbg.generated-->
+    <!--@Table `application`-->
+    <id column="applicationId" jdbcType="INTEGER" property="applicationid" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="applyName" jdbcType="VARCHAR" property="applyname" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="applyDate" jdbcType="DATE" property="applydate" />
+    <result column="manufacturer" jdbcType="VARCHAR" property="manufacturer" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    applicationId, userId, applyName, num, price, applyDate, manufacturer, `state`
+  </sql>
+
+  <select id="showApplicationList" resultType="cn.yesmylord.dms.dto.ApplicationDto">
+    select * from application where state != -1
+  </select>
+
+  <select id="searchApplication" resultType="cn.yesmylord.dms.dto.ApplicationDto">
+    select * from application where state != -1 and applyName like CONCAT('%',#{name},'%')
+  </select>
+
+  <update id="updateApplication">
+    UPDATE application SET
+    <if test="true">
+      userId= #{userid}
+    </if>
+    <if test="applyname != null and applyname != ''">
+      ,applyname= #{applyname}
+    </if>
+    <if test="num != null">
+      ,num= #{num}
+    </if>
+    <if test="price != null">
+      ,price= #{price}
+    </if>
+    <if test="applydate != null">
+      ,applyDate= #{applydate}
+    </if>
+    <if test="manufacturer != null and manufacturer != ''">
+      ,manufacturer= #{manufacturer}
+    </if>
+    <if test="state != null">
+      ,state= #{state}
+    </if>
+    WHERE applicationId=#{applicationid}
+  </update>
+
+  <insert id="insertApplication">
+    insert into application(userId,applyName,num,price,applyDate,manufacturer,`state`)
+    values (#{userid},#{applyname},#{num},#{price},#{applydate},#{manufacturer},0)
+  </insert>
+
+  <update id="updateApplicationState">
+    UPDATE application SET state= -1 WHERE applicationId=#{id}
+  </update>
+</mapper>

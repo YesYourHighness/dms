@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yesmylord.dms.mapper.DeviceMapper">
+  <resultMap id="BaseResultMap" type="cn.yesmylord.dms.domain.Device">
+    <!--@mbg.generated-->
+    <!--@Table device-->
+    <id column="deviceId" jdbcType="INTEGER" property="deviceid" />
+    <result column="deviceName" jdbcType="VARCHAR" property="devicename" />
+    <result column="categoryId" jdbcType="INTEGER" property="categoryid" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="purchaseDate" jdbcType="DATE" property="purchasedate" />
+    <result column="quality" jdbcType="DATE" property="quality" />
+    <result column="manufacturer" jdbcType="VARCHAR" property="manufacturer" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    deviceId, deviceName, categoryId, userId, price, `state`, total, model, purchaseDate, 
+    quality, manufacturer
+  </sql>
+    <select id="showDeviceList" resultType="cn.yesmylord.dms.dto.DeviceDto">
+    select * from device where state!=-1
+    </select>
+
+  <select id="searchByDeviceName" resultType="cn.yesmylord.dms.dto.DeviceDto">
+    select * from device where state!=-1 and deviceName like CONCAT('%',#{deviceName},'%')
+  </select>
+
+  <insert id="insertDevice" parameterType="cn.yesmylord.dms.form.DeviceInsertForm">
+    insert into device(deviceName,categoryId,userId,price,`state`,total,model,purchaseDate,quality,manufacturer)
+    values (#{devicename},#{categoryid},#{userid},#{price},0,#{total},#{model},#{purchasedate},#{quality},#{manufacturer})
+  </insert>
+
+  <update id="updateDevice" parameterType="cn.yesmylord.dms.form.DeviceUpdateForm">
+    UPDATE device SET
+    <if test="devicename != null and devicename != ''">
+      devicename= #{devicename}
+    </if>
+    <if test="true">
+      ,categoryid= #{categoryid}
+    </if>
+    <if test="true">
+      ,userid= #{userid}
+    </if>
+    <if test="price != null">
+      ,price= #{price}
+    </if>
+    <if test="state != null">
+      ,state= #{state}
+    </if>
+    <if test="total != null">
+      ,total= #{total}
+    </if>
+    <if test="purchasedate != null">
+      ,purchaseDate= #{purchasedate}
+    </if>
+    <if test="quality != null">
+      ,quality= #{quality}
+    </if>
+    <if test="manufacturer != null and manufacturer != ''">
+      ,manufacturer= #{manufacturer}
+    </if>
+    WHERE deviceId=#{deviceid}
+  </update>
+
+  <update id="updateDeviceState">
+    UPDATE device SET
+    state=-1
+    WHERE deviceId=#{deviceId}
+  </update>
+
+  <update id="changeState">
+    UPDATE device SET
+    state=#{i}
+    WHERE deviceId=#{deviceId}
+  </update>
+
+  <select id="showFreeDeviceList" resultType="cn.yesmylord.dms.dto.DeviceDto">
+    select * from device where `state`=0
+  </select>
+
+  <select id="showNoScrapDeviceList" resultType="cn.yesmylord.dms.dto.DeviceDto">
+    select * from device where `state` !=4
+  </select>
+</mapper>

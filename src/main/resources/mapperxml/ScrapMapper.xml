@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yesmylord.dms.mapper.ScrapMapper">
+  <resultMap id="BaseResultMap" type="cn.yesmylord.dms.domain.Scrap">
+    <!--@mbg.generated-->
+    <!--@Table scrap-->
+    <id column="scrapId" jdbcType="INTEGER" property="scrapid" />
+    <result column="deviceId" jdbcType="INTEGER" property="deviceid" />
+    <result column="scrapDate" jdbcType="DATE" property="scrapdate" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    scrapId, deviceId, scrapDate, userId
+  </sql>
+
+  <select id="showScrapList" resultType="cn.yesmylord.dms.dto.ScrapDto">
+    select * from scrap where state != -1
+    </select>
+
+  <update id="updateScrap" parameterType="cn.yesmylord.dms.form.RepairUpdateDto">
+    update scrap set
+    <if test="deviceid !=null ">
+      deviceid =#{deviceid}
+    </if>
+    <if test="userid !=null ">
+      ,userid =#{userid}
+    </if>
+    <if test="scrapdate !=null ">
+      ,scrapDate =#{scrapdate}
+    </if>
+    where scrapId=#{scrapid}
+  </update>
+
+  <update id="updateScrapState">
+    update scrap set `state` =-1 where scrapId=#{id}
+  </update>
+
+  <insert id="insertScrap">
+    insert into scrap(deviceId,scrapDate,userId,`state`)
+    values (#{deviceid},#{scrapdate},#{userid},0)
+  </insert>
+
+  <select id="searchScrapById" resultType="cn.yesmylord.dms.dto.ScrapDto">
+    select * from scrap where state != -1 and scrapId = #{id}
+  </select>
+</mapper>
